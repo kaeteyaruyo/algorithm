@@ -1,5 +1,4 @@
 #include<stdio.h>
-#define N 5
 
 int merge_count = 0;
 int bubble_count = 0;
@@ -10,13 +9,22 @@ void print(int arr[], int n);
 
 int main(){
 
-    int arr[N] = {9,1,0,5,4};
-    int reg[N] = {0};
+    int N,i;
+
+    printf("Enter sequence length: ");
+    scanf("%d", &N);
+
+    int arr[N], arr1[N], reg[N];
+    printf("Enter sequence: ");
+    for(i = 0; i < N; ++i){
+        scanf("%d", &arr[i]);
+        arr1[i] = arr[i];
+    }
+
     print(arr,N);
     merge_sort(arr,reg,0,N-1);
     print(arr,N);
 
-    int arr1[N] = {9,1,0,5,4};
     bubble_sort(arr1,N);
     print(arr1,N);
 
