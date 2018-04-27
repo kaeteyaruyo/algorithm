@@ -4,75 +4,70 @@
 ** but the space complexity is in O(n)  **
 *****************************************/
 #include<cstdio>
-#include<vector>
+#include<cmath>
 #define n 10
+#define number_of_digit 2
+
 using namespace std;
 
-int input[n];
-vector<int> bucket[n];
-
-void count_sort(vector<int> &v);
+typedef struct { short int digit[number_of_digit]; } word;
+word input[n];
+int output[n];
+void count_sort(word init[], short int d);
 
 int main(){
 
     int i;
-    vector<int>::iterator it;
+    word input[n];
 
     printf("Input size: %d\n", n);
-    printf("Enter %d integers in 0 ~ %d: ", n, n*n-1);
+    printf("Enter %d integers in 0 ~ %d: ", n, (int)(pow(n,number_of_digit)-1));
 
-    // get inputs
+    // get inputs and change them into n base numbers
     for(i = 0; i < n; ++i){
         int temp;
         scanf("%d", &temp);
-        if(temp >= n*n){
+        if(temp >= pow(n,number_of_digit)){
             printf("Exceed range.\n");
             return 0;
         }
-        input[i] = temp;
+        for(int j = 0; j < number_of_digit; ++j)
+            input[i].digit[j] = (temp / (int)pow(n,j)) % n;
     }
 
-    // classify inputs into buckets
-    for(i = 0; i < n; ++i)
-        bucket[input[i] / n].push_back(input[i]);
-
-    // sort each bucket using count sort
-    for(i = 0; i < n; ++i)
-        count_sort(bucket[i]);
-
-    // cobine each sorted bucket
-    for(i = 1; i < n; ++i){
-        for(it = bucket[i].begin(); it != bucket[i].end(); it++)
-            bucket[0].push_back(*it);
-        bucket[i].clear();
-    }
+    // radix sort using counting sort
+    for(i = 0; i < number_of_digit; ++i)
+        count_sort(input, i);
 
     // print 
     printf("Sorted: ");
-    for(it = bucket[0].begin(); it != bucket[0].end(); it++)
-        printf("%d ", *it);
+    for(i = 0; i < n; ++i){
+        output[i] = 0;
+        for(int j = 0; j < number_of_digit; ++j)
+            output[i] += input[i].digit[j] * (int)pow(n, j);
+        printf("%d ", output[i]);
+    }
     printf("\n");
 
     return 0;
 
 }
 
-void count_sort(vector<int> &v){
+void count_sort(word init[], short int d){
 
-    vector<int> done;
+    word done[n];
     int i, j, k, count_arr[n];
 
 	for (k = 0; k < n; k++)
 		count_arr[k] = 0;
-	for (i = 0; i < v.size(); i++){
-		count_arr[v[i] % n]++;
-        done.push_back(0);
+	for (i = 0; i < n; i++){
+		count_arr[init[i].digit[d]]++;
     }
 	for (k = 1; k < n; k++)
 		count_arr[k] += count_arr[k - 1];
-	for (j = v.size(); j > 0; j--)
-		done[--count_arr[v[j - 1] % n]] = v[j - 1];
-    for (i = 0; i < v.size(); i++)
-        v[i] = done[i];
+	for (j = n; j > 0; j--)
+		done[--count_arr[init[j - 1].digit[d]]] = init[j - 1];
+    for (i = 0; i < n; i++)
+        init[i] = done[i];
 
 }
