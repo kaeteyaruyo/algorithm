@@ -3,16 +3,16 @@
 ** in the range 0 to n^2-1 in O(n) time,**
 ** but the space complexity is in O(n)  **
 *****************************************/
-#include<cstdio>
-#include<cmath>
+#include<stdio.h>
+#include<math.h>
 #define n 10
 #define number_of_digit 2
 
-using namespace std;
-
 typedef struct { short int digit[number_of_digit]; } word;
+
 word input[n];
 int output[n];
+
 void count_sort(word init[], short int d);
 
 int main(){
