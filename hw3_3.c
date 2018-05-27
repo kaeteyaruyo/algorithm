@@ -20,6 +20,8 @@ int main(){
 
     printf("Max sum of charm: %d\n", knapsack(n, m));
 
+    return 0;
+
 }
 
 int knapsack(int number, int money){
